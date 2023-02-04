@@ -1,3 +1,5 @@
+# Исправил пока замечания, которые были помечены как "Нужно исправить".
+
 class InfoMessage:
     """Информационное сообщение о тренировке."""
     def __init__(self,
@@ -24,9 +26,9 @@ class InfoMessage:
 class Training:
     """Базовый класс тренировки."""
 
-    LEN_STEP = 0.65
-    M_IN_KM = 1000
-    MIN_IN_HOUR = 60
+    LEN_STEP: float = 0.65
+    M_IN_KM: float = 1000
+    MIN_IN_HOUR: int = 60
 
     def __init__(self, action: int, duration: float, weight: float) -> None:
         self.action = action
@@ -41,7 +43,7 @@ class Training:
         """Получить среднюю скорость движения км/ч."""
         return (self.get_distance() / self.duration)
 
-    def get_spent_calories(self) -> float:
+    def get_spent_calories(self):
         """Получить количество затраченных калорий."""
         pass
 
@@ -71,10 +73,10 @@ class Running(Training):
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
 
-    KOEF_1 = 0.029
-    KOEF_2 = 0.035
-    MS_IN_KMH = 0.278
-    SM_IN_M = 100
+    KOEF_1: float = 0.029
+    KOEF_2: float = 0.035
+    MS_IN_KMH: float = 0.278
+    SM_IN_M: int = 100
 
     def __init__(self,
                  action: int,
@@ -96,16 +98,16 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
 
-    LEN_STEP = 1.38
-    COEF_1 = 1.1
-    COEF_2 = 2
+    LEN_STEP: float = 1.38
+    COEF_1: float = 1.1
+    COEF_2: int = 2
 
     def __init__(self,
                  action: int,
                  duration: float,
                  weight: float,
                  length_pool: int,
-                 count_pool: int):
+                 count_pool: int) -> None:
         super().__init__(action, duration, weight)
         self.length_pool = length_pool
         self.count_pool = count_pool
@@ -123,11 +125,14 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    training_list = {'SWM': Swimming,
-                     'RUN': Running,
-                     'WLK': SportsWalking
-                     }
-    return training_list[workout_type](*data)
+    training_list: dict = {'SWM': Swimming,
+                           'RUN': Running,
+                           'WLK': SportsWalking
+                           }
+    if workout_type in training_list:
+        return training_list[workout_type](*data)
+    else:
+        return ('Ошибка')
 
 
 def main(training: Training) -> None:
@@ -138,7 +143,7 @@ def main(training: Training) -> None:
 
 if __name__ == '__main__':
     packages = [
-        ('SWM', [720, 1, 80, 25, 40]),
+        ('SWM', [720, 2, 80, 25, 40]),
         ('RUN', [15000, 1, 75]),
         ('WLK', [9000, 1, 75, 180]),
     ]
